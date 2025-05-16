@@ -14,7 +14,7 @@ test('All buttons and links are clickable', async ({ page }) => {
 });
 
 test('Download My Resume button triggers a file download', async ({ page, context }) => {
-  await page.goto('file://' + process.cwd() + '/_site/index.html');
+  await page.goto('http://localhost:3000');
 
   // Wait for the download event after clicking the button
   const [ download ] = await Promise.all([

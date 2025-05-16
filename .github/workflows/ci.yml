@@ -24,8 +24,12 @@ jobs:
     #install playwright
     - name: Install dependencies
       run: npm install
-    - name: Install Playwright Browsers
-      uses: microsoft/playwright-github-action@v1
+    - name: install playwright browsers
+      run: npx playwright install
+      env:
+        PLAYWRIGHT_BROWSERS_PATH: 0
+    #- name: Install Playwright Browsers
+     # uses: microsoft/playwright-github-action@v1
 
 
     #builds a container for the jekyll site using docker, this is what literally runs the site
@@ -47,6 +51,8 @@ jobs:
     #runs the playwright tests in the repo
     - name: Run Playwright tests
       run: npx playwright test
+      env:
+        PLAYWRIGHT_BROWSERS_PATH: 0
     #uploads the report thats provided from the playwright tests
     - name: Upload test report (optional)
       if: always()

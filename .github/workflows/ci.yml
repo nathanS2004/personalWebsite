@@ -9,7 +9,7 @@ on:
 
 jobs:
   test-site:
-    runs-on: ubuntu-latest #vm runs on linux but should add windows and macOS for testing reasons
+    runs-on: ubuntu-22.04 #vm runs on linux but should add windows and macOS for testing reasons
     
     #checkout 
     steps:

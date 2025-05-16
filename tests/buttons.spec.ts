@@ -14,14 +14,23 @@ test('All buttons and links are clickable', async ({ page }) => {
   expect(buttons.length).toBeGreaterThan(0); // make sure buttons exist
 });
 
-test('Resume download link works', async ({ page }) => {
+import { test, expect } from '@playwright/test';
+
+test('Download triggers popup with correct URL', async ({ page }) => {
+  // Go to your site
   await page.goto('http://localhost:3000');
 
-  const [ download ] = await Promise.all([
-    page.waitForEvent('download'),
-    page.click('#resume-download')
+  // Start waiting for popup event
+  const [popup] = await Promise.all([
+    page.waitForEvent('popup'),
+    page.click('#resume-download') // Trigger button that calls window.open(...)
   ]);
 
-  const suggestedFilename = download.suggestedFilename();
-  expect(suggestedFilename).toContain('Nathan_Sheyman_Resume');
+  // Wait for the popup to load
+  await popup.waitForLoadState('load');
+
+  // Assert that the popup URL contains the PDF or matches expected pattern
+  const popupUrl = popup.url();
+  expect(popupUrl).toContain('.pdf'); // Or use a regex /your-pattern/
 });
+

@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('All buttons and links are clickable', async ({ page }) => {
-  await page.goto('file://' + process.cwd() + '/_site/index.html'); // or use your hosted path
+  await page.goto('http://localhost:3000'); // or use your hosted path
 
   const links = await page.$$('a');
   for (const link of links) {

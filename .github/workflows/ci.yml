@@ -22,13 +22,16 @@ jobs:
         node-version: '20'
 
     - name: Install dependencies
-      run: npm install
+      run: |
+        npm install
+        npx playwright install
 
-    - name: Install Playwright Browsers
-      uses: microsoft/playwright-github-action@v1
-      with:
-        with-deps: true
-
+    #- name: Install Playwright Browsers
+     # uses: microsoft/playwright-github-action@v1
+      #with:
+       # with-deps: true
+    - name: Run playwright tests
+      run: npx playwright test
 
     - name: Build Jekyll site
       run: |

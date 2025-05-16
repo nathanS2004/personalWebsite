@@ -13,15 +13,14 @@ test('All buttons and links are clickable', async ({ page }) => {
   expect(buttons.length).toBeGreaterThan(0); // make sure buttons exist
 });
 
-test('Download My Resume button triggers a file download', async ({ page, context }) => {
+test('Resume download link works', async ({ page }) => {
   await page.goto('http://localhost:3000');
 
-  // Listen for download event triggered by clicking the anchor tag with download attr
   const [ download ] = await Promise.all([
     page.waitForEvent('download'),
-    page.click('#resume-download') // this is the <a> element
+    page.click('#resume-download')
   ]);
 
-  const downloadPath = await download.path();
-  expect(downloadPath).toBeTruthy(); // confirms a file was downloaded
+  const suggestedFilename = download.suggestedFilename();
+  expect(suggestedFilename).toContain('Nathan_Sheyman_Resume');
 });

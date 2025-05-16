@@ -9,7 +9,7 @@ test('All buttons and links are clickable', async ({ page }) => {
     expect(href).toBeTruthy();
   }
 
-  const buttons = await page.$$('button');
+  const buttons = await page.$$('a[download], button');
   expect(buttons.length).toBeGreaterThan(0);
 });
 
@@ -17,7 +17,7 @@ test('Download My Resume button triggers a file download', async ({ page, contex
   await page.goto('http://localhost:3000');
 
   // Wait for the download event after clicking the button
-  const [ download ] = await Promise.all([
+  await Promise.all([
     page.waitForEvent('download'),
     page.click('a[download] button')
   ]);

@@ -10,6 +10,7 @@ test('All buttons and links are clickable', async ({ page }) => {
   }
 
   const buttons = await page.$$('button');
+  console.log('Found buttons:', buttons.length);
   expect(buttons.length).toBeGreaterThan(0); // make sure buttons exist
 });
 

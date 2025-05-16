@@ -22,8 +22,11 @@ jobs:
         node-version: '20' #doesnt matter too much but 16-20 apparently are best for playwright
        
     #install playwright
-    - name: Install Playwright Browsers
-      uses: microsoft/playwright-github-action@v1
+    - name: Install dependencies and browsers
+      run: |
+        npm install
+        npx playwright install --with-deps
+
 
     #builds a container for the jekyll site using docker, this is what literally runs the site
     - name: Build Jekyll site

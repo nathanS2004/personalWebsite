@@ -14,8 +14,6 @@ test('All buttons and links are clickable', async ({ page }) => {
   expect(buttons.length).toBeGreaterThan(0); // make sure buttons exist
 });
 
-import { test, expect } from '@playwright/test';
-
 test('Download triggers popup with correct URL', async ({ page }) => {
   // Go to your site
   await page.goto('http://localhost:3000');

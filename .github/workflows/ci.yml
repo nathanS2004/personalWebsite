@@ -1,5 +1,6 @@
+#action name
 name: Jekyll site CI with Playwright
-
+# trigger on this event
 on:
   push:
     branches: [ "main" ]
@@ -8,8 +9,9 @@ on:
 
 jobs:
   test-site:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-latest #vm runs on linux but should add windows and macOS for testing reasons
+    
+    #checkout 
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4

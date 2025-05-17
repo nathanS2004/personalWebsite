@@ -14,21 +14,28 @@ test('All buttons and links are clickable', async ({ page }) => {
   expect(buttons.length).toBeGreaterThan(0); // make sure buttons exist
 });
 
-test('Download triggers popup with correct URL', async ({ page }) => {
+
+import path from 'path';
+
+test('Download My Resume button triggers a real file download', async ({ page, browserName, context }) => {
   // Go to your site
   await page.goto('http://localhost:3000');
 
-  // Start waiting for popup event
-  const [popup] = await Promise.all([
-    page.waitForEvent('popup'),
-    page.click('#resume-download') // Trigger button that calls window.open(...)
-  ]);
+  // Start waiting for the download event
+  const downloadPromise = page.waitForEvent('download');
 
-  // Wait for the popup to load
-  await popup.waitForLoadState('load');
+  // Click the actual <a> or button that triggers the download
+  await page.click('#resume-download'); // <a id="resume-download" ...>
 
-  // Assert that the popup URL contains the PDF or matches expected pattern
-  const popupUrl = popup.url();
-  expect(popupUrl).toContain('.pdf'); // Or use a regex /your-pattern/
+  // Get the download object
+  const download = await downloadPromise;
+
+  // Save to a known path (e.g., in the test output folder)
+  const savePath = path.join(__dirname, 'downloads', download.suggestedFilename());
+  await download.saveAs(savePath);
+
+  // Check that the download actually happened
+  expect(await download.path()).not.toBeNull();
 });
+
 

@@ -79,6 +79,12 @@ test('Download My Resume button downloads a PDF file', async ({ page }) => {
 test('All interactive elements lead to valid destinations', async ({ page }) => {
   await page.goto('http://localhost:3000');
 
+  // Debugging: Capture a screenshot of the page
+  await page.screenshot({ path: 'debug-screenshot.png' });
+
+  // Debugging: Log the page content
+  console.log(await page.content());
+
   const buttons = await page.$$('button');
   expect(buttons.length).toBeGreaterThan(0); // Ensure buttons exist
 

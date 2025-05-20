@@ -76,23 +76,48 @@ test('Download My Resume button downloads a PDF file', async ({ page }) => {
   expect(fs.existsSync(savePath)).toBe(true);
 });
 
-test('All interactive elements lead to valid destinations', async ({ page }) => {
+test('All interactive elements (buttons and links) lead to valid destinations', async ({ page }) => {
   await page.goto('http://localhost:3000');
 
+  // Check all <a> tags
+  const links = await page.$$('a');
+  expect(links.length).toBeGreaterThan(0); // Ensure at least one link exists
+
+  for (const link of links) {
+    const href = await link.getAttribute('href');
+    expect(href).not.toBeNull(); // Ensure the link has an href
+
+    if (href?.startsWith('http')) {
+      // If the link opens in a new tab, validate the URL
+      const popupPromise = page.context().waitForEvent('page');
+      await link.click();
+      const newPage = await popupPromise;
+      await newPage.waitForLoadState('load');
+      console.log(`Opened external link: ${newPage.url()}`);
+      await expect(newPage).toHaveURL(href);
+      await newPage.close();
+    }
+  }
+
+  // Check all <button> elements
   const buttons = await page.$$('button');
   expect(buttons.length).toBeGreaterThan(0); // Ensure buttons exist
 
   for (const button of buttons) {
+    const onclick = await button.getAttribute('onclick');
     const href = await button.getAttribute('href');
-    expect(href).not.toBeNull(); // Ensure the button has an href
 
-    if (href?.startsWith('http')) {
-      // If the button opens in a new tab, validate the URL
-      const popupPromise = page.context().waitForEvent('page');
-      await button.click();
-      const newPage = await popupPromise;
+    // Check if the button has a valid action
+    expect(onclick || href).not.toBeNull();
+
+    if (href) {
+      // If the button has an href, ensure it navigates correctly
+      const [newPage] = await Promise.all([
+        page.waitForEvent('popup'),
+        button.click(),
+      ]);
       await newPage.waitForLoadState('load');
-      console.log(`Opened external link: ${newPage.url()}`);
+      console.log(`Button navigated to: ${newPage.url()}`);
       await newPage.close();
     }
   }

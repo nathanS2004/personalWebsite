@@ -47,14 +47,14 @@ jobs:
         sleep 10
 
 
-    
+    - name: List output HTML files
+      run: ls -l _site && cat _site/index.html
 
     #runs the playwright tests in the repo
     - name: Run Playwright tests
       run: npx playwright test
 
-    - name: List output HTML files
-      run: ls -l _site && cat _site/index.html
+
 
     #uploads the report thats provided from the playwright tests
     - name: Upload test report (optional)

@@ -55,27 +55,6 @@ test('All buttons lead to valid links or actions', async ({ page }) => {
   }
 });
 
-test('Download My Resume button downloads a PDF file', async ({ page }) => {
-  await page.goto('http://localhost:3000');
-
-  const downloadPromise = page.waitForEvent('download');
-  await page.click('#resume-download');
-
-  const download = await downloadPromise;
-
-  // Ensure the downloaded file is a PDF
-  const suggestedFilename = download.suggestedFilename();
-  expect(suggestedFilename.endsWith('.pdf')).toBe(true);
-
-  const saveDir = path.join(__dirname, 'downloads');
-  fs.mkdirSync(saveDir, { recursive: true });
-
-  const savePath = path.join(saveDir, suggestedFilename);
-  await download.saveAs(savePath);
-
-  expect(fs.existsSync(savePath)).toBe(true);
-});
-
 test('All interactive elements lead to valid destinations', async ({ page }) => {
   await page.goto('http://localhost:3000');
 

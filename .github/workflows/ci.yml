@@ -44,7 +44,7 @@ jobs:
     - name: Start HTTP server
       run: |
         npx serve _site -l 3000 &
-        sleep 3
+        sleep 10
 
 
     
@@ -52,6 +52,9 @@ jobs:
     #runs the playwright tests in the repo
     - name: Run Playwright tests
       run: npx playwright test
+
+    - name: List output HTML files
+      run: ls -l _site && cat _site/index.html
 
     #uploads the report thats provided from the playwright tests
     - name: Upload test report (optional)
